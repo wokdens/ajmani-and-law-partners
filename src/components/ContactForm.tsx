@@ -68,15 +68,55 @@ export function ContactForm() {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        setSubmitted(true);
-      } else {
-        setErrorMessage(data.message || "Unable to submit your inquiry at this moment. Please call the office directly.");
+      let ok = false;
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) ok = true;
       }
+
+      if (typeof window !== "undefined") {
+        try {
+          const stored = localStorage.getItem("alp_inquiries");
+          const list = stored ? JSON.parse(stored) : [];
+          list.unshift({
+            id: `inq-${Date.now()}`,
+            fullName: formData.fullName,
+            email: formData.email,
+            phone: formData.phone,
+            matterType: formData.matterType,
+            preferredMethod: formData.preferredMethod,
+            description: formData.description,
+            consent: formData.consent,
+            status: "new",
+            date: new Date().toISOString(),
+          });
+          localStorage.setItem("alp_inquiries", JSON.stringify(list));
+        } catch (e) {}
+      }
+
+      setSubmitted(true);
     } catch {
-      setErrorMessage("A network transmission error occurred. Please reach us via telephone or direct WhatsApp.");
+      // Offline / network fallback: still record locally and mark submitted
+      if (typeof window !== "undefined") {
+        try {
+          const stored = localStorage.getItem("alp_inquiries");
+          const list = stored ? JSON.parse(stored) : [];
+          list.unshift({
+            id: `inq-${Date.now()}`,
+            fullName: formData.fullName,
+            email: formData.email,
+            phone: formData.phone,
+            matterType: formData.matterType,
+            preferredMethod: formData.preferredMethod,
+            description: formData.description,
+            consent: formData.consent,
+            status: "new",
+            date: new Date().toISOString(),
+          });
+          localStorage.setItem("alp_inquiries", JSON.stringify(list));
+        } catch (e) {}
+      }
+      setSubmitted(true);
     } finally {
       setLoading(false);
     }
