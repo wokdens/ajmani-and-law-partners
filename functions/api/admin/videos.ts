@@ -12,7 +12,7 @@ const defaultVideos = [
     topic: "Commercial Courts & High Court Procedure",
     date: "2026-09-05",
     summary: "Advocate Lalit Ajmani explains why the 120-day timeframe for filing a written statement in commercial suits before the Delhi High Court cannot be extended, citing SC Constitution Bench precedents.",
-    isFeatured": true
+    isFeatured: true
   },
   {
     id: "vid-ni-act-legal-notice",
@@ -24,7 +24,7 @@ const defaultVideos = [
     topic: "Cheque Bounce & Banking Litigation",
     date: "2026-08-28",
     summary: "A 90-second essential checklist detailing the critical 15-day statutory response period, replying to demand notices, and preserving evidentiary bank memos.",
-    isFeatured": true
+    isFeatured: true
   },
   {
     id: "vid-arbitration-section-9",
@@ -37,7 +37,7 @@ const defaultVideos = [
     topic: "Arbitration & Dispute Resolution",
     date: "2026-08-15",
     summary: "Practical courtroom walkthrough on securing emergency status quo orders, asset freezing, and injunctions before the High Court of Delhi prior to the arbitral tribunal being constituted.",
-    isFeatured": true
+    isFeatured: true
   },
   {
     id: "vid-probate-partition-delhi",
@@ -49,7 +49,7 @@ const defaultVideos = [
     topic: "Civil Succession & Partition Suits",
     date: "2026-07-22",
     summary: "Detailed legal analysis examining the territorial scope of Section 213 of the Indian Succession Act for immovable properties and wills executed within the National Capital Territory of Delhi.",
-    isFeatured": false
+    isFeatured: false
   }
 ];
 
