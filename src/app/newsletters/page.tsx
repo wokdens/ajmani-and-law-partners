@@ -45,15 +45,15 @@ export default function NewslettersPage() {
               Home
             </Link>
             <span>/</span>
-            <span className="text-slate-400">Monthly Legal Dispatches</span>
+            <span className="text-slate-400">Newsletters &amp; Updates</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white tracking-tight leading-tight">
-            Monthly Legal Dispatch &bull; Public Archive
+            Monthly Newsletters &amp; Legal Updates
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 font-sans max-w-3xl leading-relaxed">
-            Every month, Ajmani &amp; Law Partners publishes a structured legal review examining procedural rulings, commercial suit decrees, and statutory reforms from the Hon&apos;ble High Court of Delhi and appellate forums.
+            Explore the monthly legal newsletter archive from Ajmani &amp; Law Partners, New Delhi. Authoritative statutory analysis, landmark Delhi High Court rulings, Section 138 NI Act updates, and commercial dispute reviews.
           </p>
         </div>
       </section>

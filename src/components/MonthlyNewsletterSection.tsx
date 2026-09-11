@@ -56,13 +56,13 @@ export function MonthlyNewsletterSection({ initialNewsletters }: MonthlyNewslett
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brass-400/10 border border-brass-400/30 text-brass-700 text-xs font-sans font-semibold uppercase tracking-wider mb-2">
             <Sparkles className="w-3.5 h-3.5 text-brass-600" />
-            <span>Monthly Legal Dispatch &bull; New Delhi</span>
+            <span>Chambers Monthly Newsletter &bull; New Delhi</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-navy-900 tracking-tight">
-            Delhi High Court Jurisprudence &amp; Dispute Bulletin
+            Monthly Newsletters &amp; Legal Updates
           </h2>
           <p className="text-sm sm:text-base text-slate-600 font-sans mt-2 max-w-3xl leading-relaxed">
-            Published every month under the editorial leadership of Advocate Lalit Ajmani (Enrolment No. D/5332/2017). Providing authoritative procedural analysis, landmark Delhi High Court rulings, and statutory updates for commercial litigants.
+            Published every month under the editorial leadership of Advocate Lalit Ajmani (Enrolment No. D/5332/2017). Providing authoritative procedural analysis, landmark Delhi High Court rulings, and statutory legal updates.
           </p>
         </div>
 
@@ -72,7 +72,7 @@ export function MonthlyNewsletterSection({ initialNewsletters }: MonthlyNewslett
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-slate-100 text-xs font-semibold tracking-wide transition-colors"
           >
             <Archive className="w-3.5 h-3.5 text-brass-400" />
-            <span>Complete Archive</span>
+            <span>All Newsletters Archive</span>
           </Link>
         </div>
       </div>
@@ -86,7 +86,7 @@ export function MonthlyNewsletterSection({ initialNewsletters }: MonthlyNewslett
             <div className="flex items-center justify-between">
               <span className="inline-flex items-center gap-1.5 text-xs font-bold font-sans uppercase tracking-wider px-2.5 py-1 rounded-full bg-navy-950 text-brass-400 border border-brass-400/30">
                 <FileText className="w-3.5 h-3.5" />
-                {selectedIssue.isLatest ? "Current Monthly Issue" : "Archived Dispatch"}
+                {selectedIssue.isLatest ? "Latest Monthly Newsletter" : "Previous Edition"}
               </span>
               <span className="text-xs text-slate-500 font-medium">
                 {selectedIssue.month}
@@ -105,14 +105,14 @@ export function MonthlyNewsletterSection({ initialNewsletters }: MonthlyNewslett
 
             {/* Executive Summary */}
             <div className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans border-t border-b border-slate-100 py-3.5 space-y-2">
-              <p className="font-medium text-slate-800">Editorial Foreword:</p>
+              <p className="font-medium text-slate-800">Editorial Overview:</p>
               <p>{selectedIssue.summary}</p>
             </div>
 
             {/* Core Statutory Topics */}
             <div className="space-y-2">
               <span className="text-xs font-sans font-bold uppercase tracking-wider text-slate-400 block">
-                Statutes &amp; Disciplines Covered:
+                Topics &amp; Areas Covered:
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {selectedIssue.topics.map((topic, idx) => (
@@ -134,7 +134,7 @@ export function MonthlyNewsletterSection({ initialNewsletters }: MonthlyNewslett
                 className="w-full py-2.5 px-4 bg-[#a67c52] hover:bg-[#8f6943] text-white font-sans font-bold text-xs rounded-lg flex items-center justify-center gap-2 transition-colors shadow-sm text-center"
               >
                 <Download className="w-3.5 h-3.5" />
-                <span>Download This 5-Page PDF</span>
+                <span>Download Newsletter PDF</span>
               </a>
 
               <a
@@ -144,41 +144,66 @@ export function MonthlyNewsletterSection({ initialNewsletters }: MonthlyNewslett
                 className="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 font-sans font-medium text-xs rounded-lg flex items-center justify-center gap-2 transition-colors text-center"
               >
                 <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
-                <span>Open in Full Browser Tab</span>
+                <span>Open Full PDF in New Tab</span>
               </a>
             </div>
           </div>
 
-          {/* Quick Subscription Card */}
-          <div className="bg-navy-950 text-white rounded-2xl p-6 border border-brass-400/30 shadow-md space-y-4">
-            <div className="flex items-center gap-2.5 text-brass-400">
-              <Mail className="w-5 h-5" />
-              <span className="font-serif font-bold text-sm">Monthly Dispatch Notification</span>
-            </div>
-            <p className="text-xs text-slate-300 font-sans leading-relaxed">
-              Receive Advocate Lalit Ajmani&apos;s monthly legal dispatch directly upon publication every month.
-            </p>
+          {/* Dedicated Showcase Card: TO SUBSCRIBE TO OUR NEWSLETTERS & UPDATES */}
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1c0810] via-[#12050b] to-[#080205] text-white p-6 border border-red-950/70 shadow-xl space-y-5">
+            {/* Ambient curved crimson background glow matching JSA reference */}
+            <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-red-600/20 blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-red-800/20 blur-3xl pointer-events-none" />
 
+            {/* Firm Brand Header (matching JSA styling) */}
+            <div className="relative z-10 border-b border-white/10 pb-4">
+              <div className="flex items-center gap-2">
+                <span className="font-serif font-black text-2xl tracking-tighter text-white">alp</span>
+                <div className="h-5 w-px bg-white/20 ml-1" />
+                <span className="text-[11px] font-sans uppercase tracking-widest text-slate-300 font-medium">
+                  advocates &amp; solicitors
+                </span>
+              </div>
+              <div className="text-[10px] text-slate-400 font-sans mt-0.5 tracking-wider">
+                Ajmani &amp; Law Partners &bull; New Delhi
+              </div>
+            </div>
+
+            {/* Exact Headline from user reference */}
+            <div className="relative z-10 space-y-1.5">
+              <h4 className="text-base sm:text-lg font-sans font-black tracking-tight text-white uppercase leading-snug">
+                TO SUBSCRIBE TO OUR NEWSLETTERS &amp; UPDATES
+              </h4>
+              <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
+                Receive each new monthly edition directly in your email upon publication.
+              </p>
+            </div>
+
+            {/* Subscription Form with High-Contrast Action Button */}
             {subscribeSuccess ? (
-              <div className="p-3 bg-emerald-900/50 border border-emerald-500/40 rounded-lg text-emerald-200 text-xs flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>You have been registered for monthly dispatch notifications.</span>
+              <div className="relative z-10 p-3.5 bg-emerald-950/80 border border-emerald-500/50 rounded-xl text-emerald-200 text-xs flex items-center gap-2.5 animate-in fade-in">
+                <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                <div>
+                  <div className="font-bold text-emerald-300">Successfully Subscribed!</div>
+                  <div className="text-[11px] text-emerald-200/80">You will receive each new monthly newsletter and legal update.</div>
+                </div>
               </div>
             ) : (
-              <form onSubmit={handleSubscribe} className="space-y-2">
+              <form onSubmit={handleSubscribe} className="relative z-10 space-y-3">
                 <input
                   type="email"
                   required
                   value={subscribeEmail}
                   onChange={(e) => setSubscribeEmail(e.target.value)}
-                  placeholder="Enter counsel or corporate email"
-                  className="w-full px-3 py-2 bg-navy-900 border border-slate-700 rounded-lg text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-brass-400"
+                  placeholder="Enter your email address"
+                  className="w-full px-3.5 py-2.5 bg-black/50 border border-white/20 rounded-xl text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
                 />
                 <button
                   type="submit"
-                  className="w-full py-2 bg-brass-400 hover:bg-brass-300 text-navy-950 text-xs font-bold rounded-lg transition-colors"
+                  className="w-full py-3 px-5 bg-gradient-to-r from-red-600 via-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-red-600/40 flex items-center justify-center gap-2 group cursor-pointer"
                 >
-                  Subscribe to Monthly Dispatch
+                  <span>CLICK HERE</span>
+                  <span className="text-sm group-hover:scale-125 transition-transform">👆</span>
                 </button>
               </form>
             )}
@@ -198,10 +223,10 @@ export function MonthlyNewsletterSection({ initialNewsletters }: MonthlyNewslett
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <span className="text-xs font-semibold uppercase tracking-widest text-brass-700 font-sans">
-              Previous Monthly Letters &bull; Dispatches Archive
+              Archive &bull; Past Editions
             </span>
             <h3 className="text-xl sm:text-2xl font-serif font-bold text-navy-900 mt-1">
-              Select a Past Edition to Read in the Viewer
+              Explore Previous Monthly Newsletters
             </h3>
           </div>
           <span className="text-xs text-slate-500">
