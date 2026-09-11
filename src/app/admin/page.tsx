@@ -798,7 +798,7 @@ export default function AdminPortalPage() {
           }`}
         >
           <Video className="w-4 h-4 text-red-500" />
-          <span>Video Updates ({videos.length})</span>
+          <span>Updates ({videos.length})</span>
         </button>
 
         <button
@@ -956,7 +956,7 @@ export default function AdminPortalPage() {
       )}
 
       {/* =========================================================================
-          TAB 2: VIDEO UPDATES & SOCIAL MEDIA
+          TAB 2: UPDATES & VIDEO BRIEFINGS
          ========================================================================= */}
       {activeTab === "videos" && (
         <div className="space-y-6">
@@ -964,10 +964,10 @@ export default function AdminPortalPage() {
             <div>
               <h2 className="text-xl font-serif font-bold text-navy-900 flex items-center gap-2">
                 <Video className="w-5 h-5 text-red-600" />
-                <span>Video Updates &amp; Social Media Manager</span>
+                <span>Updates &amp; Video Briefings Manager</span>
               </h2>
               <p className="text-xs text-slate-500 mt-0.5">
-                Publish and manage video legal briefings from LinkedIn, Instagram, YouTube, and Facebook.
+                Publish and manage video legal briefings and social updates from LinkedIn, Instagram, YouTube, and Facebook.
               </p>
             </div>
 
@@ -977,7 +977,7 @@ export default function AdminPortalPage() {
               className="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-lg flex items-center gap-2 shadow-sm transition-colors shrink-0 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
-              <span>Add New Video Update</span>
+              <span>Add New Update</span>
             </button>
           </div>
 

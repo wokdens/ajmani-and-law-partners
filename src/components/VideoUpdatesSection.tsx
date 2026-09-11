@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Play,
   ExternalLink,
@@ -12,14 +13,25 @@ import {
   Sparkles,
   Share2,
   CheckCircle2,
+  ArrowRight,
 } from "lucide-react";
 import { VideoUpdate } from "@/data/videos";
 
 interface VideoUpdatesSectionProps {
   videos: VideoUpdate[];
+  showHeader?: boolean;
+  title?: string;
+  subtitle?: string;
+  showViewAllButton?: boolean;
 }
 
-export function VideoUpdatesSection({ videos }: VideoUpdatesSectionProps) {
+export function VideoUpdatesSection({
+  videos,
+  showHeader = true,
+  title = "Updates",
+  subtitle = "Short-form legal video briefings, procedural roadmaps, and case commentaries by Advocate Lalit Ajmani across LinkedIn, Instagram Reels, YouTube, and Facebook.",
+  showViewAllButton = true,
+}: VideoUpdatesSectionProps) {
   const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
   const [activeVideo, setActiveVideo] = useState<VideoUpdate | null>(null);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
@@ -92,9 +104,39 @@ export function VideoUpdatesSection({ videos }: VideoUpdatesSectionProps) {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <section id="updates" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Section Masthead Header */}
+      {showHeader && (
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-200 pb-6 mb-8">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-red-700 text-xs font-sans font-semibold uppercase tracking-wider mb-2">
+              <Video className="w-3.5 h-3.5 text-red-600" />
+              <span>Chambers Video &amp; Social Briefings &bull; New Delhi</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-navy-900 tracking-tight">
+              {title}
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 font-sans mt-2 max-w-3xl leading-relaxed">
+              {subtitle}
+            </p>
+          </div>
+
+          {showViewAllButton && (
+            <div className="flex items-center gap-3 shrink-0">
+              <Link
+                href="/updates"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-slate-100 text-xs font-semibold tracking-wide transition-colors"
+              >
+                <span>All Updates</span>
+                <ArrowRight className="w-3.5 h-3.5 text-brass-400" />
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Platform Filter Buttons */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-6 scrollbar-none">
         {platforms.map((p) => {
           const isActive = selectedPlatform === p.id;
           return (
@@ -349,6 +391,6 @@ export function VideoUpdatesSection({ videos }: VideoUpdatesSectionProps) {
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 }

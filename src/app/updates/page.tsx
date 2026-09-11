@@ -1,25 +1,24 @@
 import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { getNewsletters } from "@/data/newsletters";
+import { Video } from "lucide-react";
 import { getVideos } from "@/data/videos";
-import { MonthlyNewsletterSection } from "@/components/MonthlyNewsletterSection";
+import { VideoUpdatesSection } from "@/components/VideoUpdatesSection";
 
 export const metadata: Metadata = {
-  title: "Newsletters & Video Updates | Ajmani & Law Partners, New Delhi",
+  title: "Updates & Video Briefings | Ajmani & Law Partners, New Delhi",
   description:
-    "Explore monthly legal newsletters, case law commentaries, and video legal briefings by Advocate Lalit Ajmani covering High Court of Delhi practice, commercial suits, Section 138 NI Act, and arbitration.",
+    "Explore chambers video updates, statutory explainers, and legal commentary by Advocate Lalit Ajmani covering High Court of Delhi practice, commercial suits, Section 138 NI Act, and arbitration.",
   keywords: [
     "Ajmani Law Partners Updates",
-    "Advocate Lalit Ajmani Newsletters",
-    "Delhi High Court Video Updates",
-    "Section 138 NI Act Updates",
-    "Commercial Courts Act Commentary",
+    "Advocate Lalit Ajmani Video Updates",
+    "Delhi High Court Video Briefings",
+    "Section 138 NI Act Legal Updates",
+    "Commercial Courts Act Video Commentary",
   ],
 };
 
 export default function UpdatesPage() {
-  const allNewsletters = getNewsletters();
   const allVideos = getVideos();
 
   return (
@@ -33,21 +32,26 @@ export default function UpdatesPage() {
               Home
             </Link>
             <span>/</span>
-            <span className="text-slate-400">Newsletters &amp; Updates</span>
+            <span className="text-slate-400">Updates</span>
+          </div>
+
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-400/30 text-red-400 text-xs font-sans tracking-wide">
+            <Video className="w-3.5 h-3.5 text-red-500" />
+            <span>Chambers Video &amp; Social Briefings &bull; New Delhi</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white tracking-tight leading-tight">
-            Newsletters &amp; Video Updates
+            Updates
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 font-sans max-w-3xl leading-relaxed">
-            Chambers monthly legal publications and video briefings published under the editorial direction of Advocate Lalit Ajmani (Enrolment No. D/5332/2017). Providing authoritative statutory analysis, procedural roadmaps, and social media briefings across Delhi High Court and trial court forums.
+            Short-form legal video updates, statutory explainers, and courtroom practice briefings published by Advocate Lalit Ajmani (Enrolment No. D/5332/2017) across LinkedIn, Instagram Reels, YouTube, and Facebook.
           </p>
         </div>
       </section>
 
-      {/* Embedded Reader & Interactive Showcase with Dual Tabs */}
-      <MonthlyNewsletterSection initialNewsletters={allNewsletters} initialVideos={allVideos} />
+      {/* Video Updates Showcase */}
+      <VideoUpdatesSection videos={allVideos} showHeader={false} />
     </div>
   );
 }

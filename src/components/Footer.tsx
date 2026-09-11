@@ -136,8 +136,13 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/newsletters" className="text-brass-300 hover:text-white transition-colors font-medium">
-                  Monthly Legal Dispatch
+                <Link href="/newsletters" className="text-slate-300 hover:text-brass-300 transition-colors">
+                  Monthly Newsletters
+                </Link>
+              </li>
+              <li>
+                <Link href="/updates" className="text-slate-300 hover:text-brass-300 transition-colors">
+                  Updates (Video Briefings)
                 </Link>
               </li>
               <li>

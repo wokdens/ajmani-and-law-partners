@@ -22,6 +22,7 @@ import { representativeMatters } from "@/data/matters";
 import { ContactForm } from "@/components/ContactForm";
 import { CourtJurisdictionExplorer } from "@/components/CourtJurisdictionExplorer";
 import { MonthlyNewsletterSection } from "@/components/MonthlyNewsletterSection";
+import { VideoUpdatesSection } from "@/components/VideoUpdatesSection";
 import { HeroCarousel } from "@/components/HeroCarousel";
 import { getNewsletters } from "@/data/newsletters";
 import { getVideos } from "@/data/videos";
@@ -147,9 +148,14 @@ export default function HomePage() {
       </section>
 
       {/* =========================================================================
-          SECTION 2: NEWSLETTERS & VIDEO UPDATES HUB
+          SECTION 2: MONTHLY LEGAL NEWSLETTERS (In-Page PDF Reader & Archive)
          ========================================================================= */}
-      <MonthlyNewsletterSection initialNewsletters={newsletters} initialVideos={videos} />
+      <MonthlyNewsletterSection initialNewsletters={newsletters} />
+
+      {/* =========================================================================
+          SECTION 2.5: CHAMBERS UPDATES (Video Briefings & Social Commentary)
+         ========================================================================= */}
+      <VideoUpdatesSection videos={videos} />
 
       {/* =========================================================================
           SECTION 3: FIRM OVERVIEW & LITIGATION ETHOS

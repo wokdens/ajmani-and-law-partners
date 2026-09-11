@@ -1,24 +1,12 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  FileText,
-  Calendar,
-  Download,
-  BookOpen,
-  ArrowRight,
-  ChevronRight,
-  Sparkles,
-  Archive,
-  Search,
-  Shield,
-} from "lucide-react";
-import { getNewsletters, getLatestNewsletter } from "@/data/newsletters";
-import { EmbeddedPdfViewer } from "@/components/EmbeddedPdfViewer";
+import { Sparkles } from "lucide-react";
+import { getNewsletters } from "@/data/newsletters";
 import { MonthlyNewsletterSection } from "@/components/MonthlyNewsletterSection";
 
 export const metadata: Metadata = {
-  title: "Monthly Legal Dispatch & Jurisprudence Archive | Ajmani & Law Partners",
+  title: "Monthly Legal Newsletters & Dispatches | Ajmani & Law Partners",
   description:
     "Explore the complete monthly legal dispatch archive from Ajmani & Law Partners, New Delhi. Authoritative statutory analysis, Delhi High Court litigation updates, Section 138 NI Act, and commercial arbitration reviews led by Advocate Lalit Ajmani.",
   keywords: [
@@ -30,12 +18,8 @@ export const metadata: Metadata = {
   ],
 };
 
-import { getVideos } from "@/data/videos";
-
 export default function NewslettersPage() {
   const allNewsletters = getNewsletters();
-  const allVideos = getVideos();
-  const latestIssue = getLatestNewsletter();
 
   return (
     <div className="space-y-12 md:space-y-16 pb-20">
@@ -48,21 +32,26 @@ export default function NewslettersPage() {
               Home
             </Link>
             <span>/</span>
-            <span className="text-slate-400">Newsletters &amp; Updates</span>
+            <span className="text-slate-400">Newsletters</span>
+          </div>
+
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brass-400/10 border border-brass-400/30 text-brass-300 text-xs font-sans tracking-wide">
+            <Sparkles className="w-3.5 h-3.5 text-brass-400" />
+            <span>Chambers Monthly Publications &bull; New Delhi</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white tracking-tight leading-tight">
-            Monthly Newsletters &amp; Legal Updates
+            Monthly Newsletters
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 font-sans max-w-3xl leading-relaxed">
-            Explore the monthly legal newsletter archive from Ajmani &amp; Law Partners, New Delhi. Authoritative statutory analysis, landmark Delhi High Court rulings, Section 138 NI Act updates, and commercial dispute reviews.
+            Chambers monthly legal publications published under the editorial direction of Advocate Lalit Ajmani (Enrolment No. D/5332/2017). Providing authoritative statutory analysis, procedural roadmaps, and case law commentaries across High Court and trial court forums.
           </p>
         </div>
       </section>
 
       {/* Embedded Reader & Interactive Showcase */}
-      <MonthlyNewsletterSection initialNewsletters={allNewsletters} initialVideos={allVideos} />
+      <MonthlyNewsletterSection initialNewsletters={allNewsletters} showHeader={false} />
     </div>
   );
 }

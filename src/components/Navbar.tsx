@@ -53,7 +53,8 @@ export function Navbar() {
     { href: "/advocate-lalit-ajmani", label: "Advocate Profile" },
     { href: "/representative-matters", label: "Selected Matters" },
     { href: "/insights", label: "Insights" },
-    { href: "/updates", label: "Newsletters & Updates" },
+    { href: "/newsletters", label: "Newsletters" },
+    { href: "/updates", label: "Updates" },
     { href: "/contact", label: "Contact Us" },
   ];
 
@@ -260,13 +261,24 @@ export function Navbar() {
 
               <Link
                 href="/newsletters"
-                className={`relative px-2.5 xl:px-3 py-2 text-xs xl:text-sm font-medium whitespace-nowrap transition-colors ${
+                className={`relative px-2 xl:px-2.5 py-2 text-xs xl:text-sm font-medium whitespace-nowrap transition-colors ${
                   pathname.startsWith("/newsletters")
-                    ? "text-[#a67c52] font-semibold after:content-[''] after:absolute after:bottom-0 after:left-2.5 xl:after:left-3 after:right-2.5 xl:after:right-3 after:h-0.5 after:bg-[#a67c52]"
+                    ? "text-[#a67c52] font-semibold after:content-[''] after:absolute after:bottom-0 after:left-2 xl:after:left-2.5 after:right-2 xl:after:right-2.5 after:h-0.5 after:bg-[#a67c52]"
                     : "text-slate-700 hover:text-navy-900"
                 }`}
               >
-                Newsletter
+                Newsletters
+              </Link>
+
+              <Link
+                href="/updates"
+                className={`relative px-2 xl:px-2.5 py-2 text-xs xl:text-sm font-medium whitespace-nowrap transition-colors ${
+                  pathname.startsWith("/updates")
+                    ? "text-[#a67c52] font-semibold after:content-[''] after:absolute after:bottom-0 after:left-2 xl:after:left-2.5 after:right-2 xl:after:right-2.5 after:h-0.5 after:bg-[#a67c52]"
+                    : "text-slate-700 hover:text-navy-900"
+                }`}
+              >
+                Updates
               </Link>
 
               <Link
