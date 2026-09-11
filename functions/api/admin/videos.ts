@@ -1,0 +1,119 @@
+// Cloudflare Pages Function: /api/admin/videos
+
+const defaultVideos = [
+  {
+    id: "vid-commercial-courts-120-days",
+    title: "Order VIII Rule 1 CPC: The Mandatory 120-Day Commercial Court Deadline",
+    platform: "LinkedIn",
+    platformUrl: "https://www.linkedin.com/in/lalitajmani/",
+    embedUrl: "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ",
+    thumbnail: "/delhi-high-court.jpg",
+    duration: "3:15 min",
+    topic: "Commercial Courts & High Court Procedure",
+    date: "2026-09-05",
+    summary: "Advocate Lalit Ajmani explains why the 120-day timeframe for filing a written statement in commercial suits before the Delhi High Court cannot be extended, citing SC Constitution Bench precedents.",
+    isFeatured": true
+  },
+  {
+    id: "vid-ni-act-legal-notice",
+    title: "What to Do Immediately After Receiving a Section 138 NI Act Legal Notice",
+    platform: "Instagram",
+    platformUrl: "https://www.linkedin.com/in/lalitajmani/",
+    thumbnail: "/delhi-district-court.jpg",
+    duration: "1:45 min",
+    topic: "Cheque Bounce & Banking Litigation",
+    date: "2026-08-28",
+    summary: "A 90-second essential checklist detailing the critical 15-day statutory response period, replying to demand notices, and preserving evidentiary bank memos.",
+    isFeatured": true
+  },
+  {
+    id: "vid-arbitration-section-9",
+    title: "Pre-Arbitral Interim Measures under Section 9 of the Arbitration Act",
+    platform: "YouTube",
+    platformUrl: "https://www.linkedin.com/in/lalitajmani/",
+    embedUrl: "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ",
+    thumbnail: "/commercial-arbitration-court.jpg",
+    duration: "5:20 min",
+    topic: "Arbitration & Dispute Resolution",
+    date: "2026-08-15",
+    summary: "Practical courtroom walkthrough on securing emergency status quo orders, asset freezing, and injunctions before the High Court of Delhi prior to the arbitral tribunal being constituted.",
+    isFeatured": true
+  },
+  {
+    id: "vid-probate-partition-delhi",
+    title: "Testamentary Disputes in Delhi: When is Probate Compulsory?",
+    platform: "Facebook",
+    platformUrl: "https://www.linkedin.com/in/lalitajmani/",
+    thumbnail: "/delhi-law-library.jpg",
+    duration: "2:50 min",
+    topic: "Civil Succession & Partition Suits",
+    date: "2026-07-22",
+    summary: "Detailed legal analysis examining the territorial scope of Section 213 of the Indian Succession Act for immovable properties and wills executed within the National Capital Territory of Delhi.",
+    isFeatured": false
+  }
+];
+
+export const onRequestGet = async () => {
+  return new Response(
+    JSON.stringify({
+      success: true,
+      videos: defaultVideos,
+    }),
+    {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+};
+
+export const onRequestPost = async (context: any) => {
+  try {
+    const body: any = await context.request.json();
+    const { title, platform, platformUrl, embedUrl, topic, duration, summary, thumbnail } = body;
+
+    const id = `vid-${Date.now()}`;
+    const newVideo = {
+      id,
+      title: (title || "").trim(),
+      platform: platform || "LinkedIn",
+      platformUrl: platformUrl || "https://www.linkedin.com/in/lalitajmani/",
+      embedUrl: embedUrl || "",
+      thumbnail: thumbnail || "/delhi-high-court.jpg",
+      duration: duration || "2:30 min",
+      topic: topic || "High Court Practice",
+      date: new Date().toISOString().split("T")[0],
+      summary: (summary || "").trim(),
+      isFeatured: true,
+    };
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: "Video update published successfully.",
+        video: newVideo,
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (error: any) {
+    return new Response(
+      JSON.stringify({ success: false, message: error?.message || "Failed to publish video." }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
+};
+
+export const onRequestDelete = async () => {
+  return new Response(
+    JSON.stringify({
+      success: true,
+      message: "Video update removed successfully.",
+    }),
+    {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+};

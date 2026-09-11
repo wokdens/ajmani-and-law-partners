@@ -18,12 +18,25 @@ import {
 import { NewsletterIssue } from "@/data/newsletters";
 import { EmbeddedPdfViewer } from "@/components/EmbeddedPdfViewer";
 
+import { VideoUpdate } from "@/data/videos";
+import defaultVideos from "@/data/videos.json";
+import { VideoUpdatesSection } from "@/components/VideoUpdatesSection";
+import { Video } from "lucide-react";
+
 interface MonthlyNewsletterSectionProps {
   initialNewsletters: NewsletterIssue[];
+  initialVideos?: VideoUpdate[];
+  defaultTab?: "newsletters" | "videos";
 }
 
-export function MonthlyNewsletterSection({ initialNewsletters }: MonthlyNewsletterSectionProps) {
+export function MonthlyNewsletterSection({
+  initialNewsletters,
+  initialVideos,
+  defaultTab = "newsletters",
+}: MonthlyNewsletterSectionProps) {
+  const [activeMediaTab, setActiveMediaTab] = useState<"newsletters" | "videos">(defaultTab);
   const [newsletters, setNewsletters] = useState<NewsletterIssue[]>(initialNewsletters);
+  const [videos, setVideos] = useState<VideoUpdate[]>(initialVideos || (defaultVideos as VideoUpdate[]));
   const [selectedIssue, setSelectedIssue] = useState<NewsletterIssue>(
     initialNewsletters.find((n) => n.isLatest) || initialNewsletters[0]
   );
@@ -56,29 +69,72 @@ export function MonthlyNewsletterSection({ initialNewsletters }: MonthlyNewslett
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brass-400/10 border border-brass-400/30 text-brass-700 text-xs font-sans font-semibold uppercase tracking-wider mb-2">
             <Sparkles className="w-3.5 h-3.5 text-brass-600" />
-            <span>Chambers Monthly Newsletter &bull; New Delhi</span>
+            <span>Chambers Knowledge &amp; Media Hub &bull; New Delhi</span>
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-navy-900 tracking-tight">
-            Monthly Newsletters &amp; Legal Updates
+            Newsletters &amp; Video Updates
           </h2>
           <p className="text-sm sm:text-base text-slate-600 font-sans mt-2 max-w-3xl leading-relaxed">
-            Published every month under the editorial leadership of Advocate Lalit Ajmani (Enrolment No. D/5332/2017). Providing authoritative procedural analysis, landmark Delhi High Court rulings, and statutory legal updates.
+            Stay informed with authoritative monthly legal dispatches, statutory analyses, and short-form video updates from Advocate Lalit Ajmani (Enrolment No. D/5332/2017) across High Court and trial court jurisdictions.
           </p>
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
           <Link
-            href="/newsletters"
+            href="/updates"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-navy-900 hover:bg-navy-800 text-slate-100 text-xs font-semibold tracking-wide transition-colors"
           >
             <Archive className="w-3.5 h-3.5 text-brass-400" />
-            <span>All Newsletters Archive</span>
+            <span>All Updates &amp; Archive</span>
           </Link>
         </div>
       </div>
 
-      {/* Main Grid: Active Newsletter Details & Interactive Multi-Page Embedded Viewer */}
-      <div id="newsletter-embedded-reader" className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* Dual Tab Switcher: Newsletters (PDF) vs Video Updates & Social Media */}
+      <div className="flex items-center justify-between flex-wrap gap-4 mb-8 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setActiveMediaTab("newsletters")}
+            className={`px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-sans font-bold transition-all flex items-center gap-2 ${
+              activeMediaTab === "newsletters"
+                ? "bg-navy-950 text-white shadow-md ring-1 ring-brass-400/40"
+                : "text-slate-600 hover:text-navy-900 hover:bg-slate-200/70"
+            }`}
+          >
+            <FileText className="w-4 h-4 text-brass-400" />
+            <span>Monthly Newsletters (PDF)</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-brass-400/20 text-brass-300 font-mono">
+              {newsletters.length}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveMediaTab("videos")}
+            className={`px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-sans font-bold transition-all flex items-center gap-2 ${
+              activeMediaTab === "videos"
+                ? "bg-navy-950 text-white shadow-md ring-1 ring-brass-400/40"
+                : "text-slate-600 hover:text-navy-900 hover:bg-slate-200/70"
+            }`}
+          >
+            <Video className="w-4 h-4 text-red-500" />
+            <span>Video Updates &amp; Social Briefings</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-red-500/20 text-red-400 font-mono">
+              {videos.length}
+            </span>
+          </button>
+        </div>
+
+        <div className="hidden md:flex items-center gap-2 text-xs text-slate-500 pr-3 font-sans">
+          <span>LinkedIn &bull; Instagram &bull; YouTube &bull; Facebook</span>
+        </div>
+      </div>
+
+      {activeMediaTab === "videos" ? (
+        <VideoUpdatesSection videos={videos} />
+      ) : (
+        <>
+          {/* Main Grid: Active Newsletter Details & Interactive Multi-Page Embedded Viewer */}
+          <div id="newsletter-embedded-reader" className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Dispatch Overview & Editorial Notes */}
         <div className="lg:col-span-4 space-y-6">
           <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
@@ -293,6 +349,8 @@ export function MonthlyNewsletterSection({ initialNewsletters }: MonthlyNewslett
           ))}
         </div>
       </div>
+      </>
+      )}
     </section>
   );
 }

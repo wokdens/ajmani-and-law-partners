@@ -53,7 +53,7 @@ export function Navbar() {
     { href: "/advocate-lalit-ajmani", label: "Advocate Profile" },
     { href: "/representative-matters", label: "Selected Matters" },
     { href: "/insights", label: "Insights" },
-    { href: "/newsletters", label: "Newsletter" },
+    { href: "/updates", label: "Newsletters & Updates" },
     { href: "/contact", label: "Contact Us" },
   ];
 

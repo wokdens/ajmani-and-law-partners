@@ -24,9 +24,11 @@ import { CourtJurisdictionExplorer } from "@/components/CourtJurisdictionExplore
 import { MonthlyNewsletterSection } from "@/components/MonthlyNewsletterSection";
 import { HeroCarousel } from "@/components/HeroCarousel";
 import { getNewsletters } from "@/data/newsletters";
+import { getVideos } from "@/data/videos";
 
 export default function HomePage() {
   const newsletters = getNewsletters();
+  const videos = getVideos();
   return (
     <div className="space-y-12 md:space-y-16 pb-16">
       {/* =========================================================================
@@ -145,9 +147,9 @@ export default function HomePage() {
       </section>
 
       {/* =========================================================================
-          SECTION 2: MONTHLY LEGAL DISPATCH & EMBEDDED MULTI-PAGE PDF VIEWER
+          SECTION 2: NEWSLETTERS & VIDEO UPDATES HUB
          ========================================================================= */}
-      <MonthlyNewsletterSection initialNewsletters={newsletters} />
+      <MonthlyNewsletterSection initialNewsletters={newsletters} initialVideos={videos} />
 
       {/* =========================================================================
           SECTION 3: FIRM OVERVIEW & LITIGATION ETHOS

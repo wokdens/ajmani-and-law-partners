@@ -1,41 +1,26 @@
 import React from "react";
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import Link from "next/link";
-import {
-  FileText,
-  Calendar,
-  Download,
-  BookOpen,
-  ArrowRight,
-  ChevronRight,
-  Sparkles,
-  Archive,
-  Search,
-  Shield,
-} from "lucide-react";
-import { getNewsletters, getLatestNewsletter } from "@/data/newsletters";
-import { EmbeddedPdfViewer } from "@/components/EmbeddedPdfViewer";
+import { getNewsletters } from "@/data/newsletters";
+import { getVideos } from "@/data/videos";
 import { MonthlyNewsletterSection } from "@/components/MonthlyNewsletterSection";
 
 export const metadata: Metadata = {
-  title: "Monthly Legal Dispatch & Jurisprudence Archive | Ajmani & Law Partners",
+  title: "Newsletters & Video Updates | Ajmani & Law Partners, New Delhi",
   description:
-    "Explore the complete monthly legal dispatch archive from Ajmani & Law Partners, New Delhi. Authoritative statutory analysis, Delhi High Court litigation updates, Section 138 NI Act, and commercial arbitration reviews led by Advocate Lalit Ajmani.",
+    "Explore monthly legal newsletters, case law commentaries, and video legal briefings by Advocate Lalit Ajmani covering High Court of Delhi practice, commercial suits, Section 138 NI Act, and arbitration.",
   keywords: [
-    "Ajmani and Law Partners Newsletter",
-    "Delhi High Court Legal Dispatch",
-    "Advocate Lalit Ajmani monthly publication",
-    "Commercial litigation bulletin Delhi",
-    "Section 138 NI Act jurisprudence",
+    "Ajmani Law Partners Updates",
+    "Advocate Lalit Ajmani Newsletters",
+    "Delhi High Court Video Updates",
+    "Section 138 NI Act Updates",
+    "Commercial Courts Act Commentary",
   ],
 };
 
-import { getVideos } from "@/data/videos";
-
-export default function NewslettersPage() {
+export default function UpdatesPage() {
   const allNewsletters = getNewsletters();
   const allVideos = getVideos();
-  const latestIssue = getLatestNewsletter();
 
   return (
     <div className="space-y-12 md:space-y-16 pb-20">
@@ -52,16 +37,16 @@ export default function NewslettersPage() {
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white tracking-tight leading-tight">
-            Monthly Newsletters &amp; Legal Updates
+            Newsletters &amp; Video Updates
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 font-sans max-w-3xl leading-relaxed">
-            Explore the monthly legal newsletter archive from Ajmani &amp; Law Partners, New Delhi. Authoritative statutory analysis, landmark Delhi High Court rulings, Section 138 NI Act updates, and commercial dispute reviews.
+            Chambers monthly legal publications and video briefings published under the editorial direction of Advocate Lalit Ajmani (Enrolment No. D/5332/2017). Providing authoritative statutory analysis, procedural roadmaps, and social media briefings across Delhi High Court and trial court forums.
           </p>
         </div>
       </section>
 
-      {/* Embedded Reader & Interactive Showcase */}
+      {/* Embedded Reader & Interactive Showcase with Dual Tabs */}
       <MonthlyNewsletterSection initialNewsletters={allNewsletters} initialVideos={allVideos} />
     </div>
   );

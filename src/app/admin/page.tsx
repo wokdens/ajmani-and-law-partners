@@ -28,15 +28,19 @@ import {
   ZoomOut,
   RotateCcw,
   Sliders,
+  Video,
+  Play,
 } from "lucide-react";
 import { NewsletterIssue } from "@/data/newsletters";
+import { VideoUpdate } from "@/data/videos";
+import defaultVideos from "@/data/videos.json";
 
 export default function AdminPortalPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [passkeyInput, setPasskeyInput] = useState<string>("");
   const [authError, setAuthError] = useState<string>("");
-  const [activeTab, setActiveTab] = useState<"newsletters" | "inquiries" | "typography">("newsletters");
+  const [activeTab, setActiveTab] = useState<"newsletters" | "videos" | "inquiries" | "typography">("newsletters");
 
   // Global Website Font Scale State
   const [fontSizeScale, setFontSizeScale] = useState<number>(100);
@@ -52,6 +56,20 @@ export default function AdminPortalPage() {
   const [formSubmitting, setFormSubmitting] = useState<boolean>(false);
   const [uploadingPdf, setUploadingPdf] = useState<boolean>(false);
   const [notification, setNotification] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  // Video Updates Management State
+  const [videos, setVideos] = useState<VideoUpdate[]>(defaultVideos as VideoUpdate[]);
+  const [isAddVideoModalOpen, setIsAddVideoModalOpen] = useState<boolean>(false);
+  const [videoSubmitting, setVideoSubmitting] = useState<boolean>(false);
+
+  // New Video Form State
+  const [newVidTitle, setNewVidTitle] = useState<string>("");
+  const [newVidPlatform, setNewVidPlatform] = useState<"LinkedIn" | "Instagram" | "YouTube" | "Facebook">("LinkedIn");
+  const [newVidUrl, setNewVidUrl] = useState<string>("");
+  const [newVidTopic, setNewVidTopic] = useState<string>("");
+  const [newVidDuration, setNewVidDuration] = useState<string>("2:30 min");
+  const [newVidThumbnail, setNewVidThumbnail] = useState<string>("/delhi-high-court.jpg");
+  const [newVidSummary, setNewVidSummary] = useState<string>("");
 
   // New Newsletter Form State
   const [newTitle, setNewTitle] = useState<string>("");
@@ -79,6 +97,7 @@ export default function AdminPortalPage() {
       if (data.authenticated || (typeof window !== "undefined" && localStorage.getItem("alp_admin_logged_in") === "true")) {
         setIsAuthenticated(true);
         loadNewsletters();
+        loadVideos();
         loadInquiries();
         loadSettings();
       } else {
@@ -88,6 +107,7 @@ export default function AdminPortalPage() {
       if (typeof window !== "undefined" && localStorage.getItem("alp_admin_logged_in") === "true") {
         setIsAuthenticated(true);
         loadNewsletters();
+        loadVideos();
         loadInquiries();
         loadSettings();
       } else {
@@ -205,6 +225,7 @@ export default function AdminPortalPage() {
         }
         setIsAuthenticated(true);
         loadNewsletters();
+        loadVideos();
         loadInquiries();
       } else if (passkeyInput === "Ajmani@78") {
         if (typeof window !== "undefined") {
@@ -212,6 +233,7 @@ export default function AdminPortalPage() {
         }
         setIsAuthenticated(true);
         loadNewsletters();
+        loadVideos();
         loadInquiries();
       } else {
         setAuthError(data.message || "Invalid administrative passkey.");
@@ -223,6 +245,7 @@ export default function AdminPortalPage() {
         }
         setIsAuthenticated(true);
         loadNewsletters();
+        loadVideos();
         loadInquiries();
       } else {
         setAuthError("Invalid administrative passkey.");
@@ -294,6 +317,92 @@ export default function AdminPortalPage() {
       }
     }
     setInquiries(list);
+  };
+
+  const loadVideos = async () => {
+    try {
+      const res = await fetch("/api/admin/videos");
+      const data = await res.json();
+      if (data.success && Array.isArray(data.videos) && data.videos.length > 0) {
+        setVideos(data.videos);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("alp_cached_videos", JSON.stringify(data.videos));
+        }
+        return;
+      }
+    } catch (err) {
+      console.error("Error loading videos:", err);
+    }
+    if (typeof window !== "undefined") {
+      const cached = localStorage.getItem("alp_cached_videos");
+      if (cached) {
+        try {
+          setVideos(JSON.parse(cached));
+        } catch (e) {}
+      }
+    }
+  };
+
+  const handlePublishVideo = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newVidTitle.trim()) {
+      alert("Please enter a video title.");
+      return;
+    }
+    setVideoSubmitting(true);
+
+    const newVideo: VideoUpdate = {
+      id: `vid-${Date.now()}`,
+      title: newVidTitle.trim(),
+      platform: newVidPlatform,
+      platformUrl: newVidUrl.trim() || "https://www.linkedin.com/in/lalitajmani/",
+      thumbnail: newVidThumbnail || "/delhi-high-court.jpg",
+      duration: newVidDuration.trim() || "2:30 min",
+      topic: newVidTopic.trim() || "High Court Practice",
+      date: new Date().toISOString().split("T")[0],
+      summary: newVidSummary.trim(),
+      isFeatured: true,
+    };
+
+    setVideos((prev) => {
+      const updated = [newVideo, ...prev];
+      if (typeof window !== "undefined") {
+        localStorage.setItem("alp_cached_videos", JSON.stringify(updated));
+      }
+      return updated;
+    });
+
+    try {
+      await fetch("/api/admin/videos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newVideo),
+      });
+    } catch (err) {}
+
+    setNotification({ type: "success", text: `Video update "${newVideo.title}" published successfully.` });
+    setIsAddVideoModalOpen(false);
+    setNewVidTitle("");
+    setNewVidUrl("");
+    setNewVidTopic("");
+    setNewVidSummary("");
+    setVideoSubmitting(false);
+  };
+
+  const handleDeleteVideo = async (id: string, title: string) => {
+    if (!confirm(`Are you sure you want to delete video update "${title}"?`)) return;
+
+    setVideos((prev) => {
+      const updated = prev.filter((v) => v.id !== id);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("alp_cached_videos", JSON.stringify(updated));
+      }
+      return updated;
+    });
+    setNotification({ type: "success", text: "Video update removed." });
+    try {
+      await fetch(`/api/admin/videos?id=${id}`, { method: "DELETE" });
+    } catch (err) {}
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -507,7 +616,7 @@ export default function AdminPortalPage() {
                 <Key className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
               </div>
               <p className="text-[11px] text-slate-500 pt-1">
-                Default Access Passkey: <code className="bg-slate-100 px-1.5 py-0.5 rounded text-navy-900 font-bold font-mono">ajmani2026</code>
+                Administrative Passkey: <code className="bg-slate-100 px-1.5 py-0.5 rounded text-navy-900 font-bold font-mono">Ajmani@78</code>
               </p>
             </div>
 
@@ -681,6 +790,19 @@ export default function AdminPortalPage() {
 
         <button
           type="button"
+          onClick={() => setActiveTab("videos")}
+          className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors flex items-center gap-2 ${
+            activeTab === "videos"
+              ? "bg-navy-900 text-white shadow-xs"
+              : "text-slate-600 hover:bg-slate-100"
+          }`}
+        >
+          <Video className="w-4 h-4 text-red-500" />
+          <span>Video Updates ({videos.length})</span>
+        </button>
+
+        <button
+          type="button"
           onClick={() => setActiveTab("inquiries")}
           className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors flex items-center gap-2 ${
             activeTab === "inquiries"
@@ -834,7 +956,115 @@ export default function AdminPortalPage() {
       )}
 
       {/* =========================================================================
-          TAB 2: CONTACT INQUIRIES
+          TAB 2: VIDEO UPDATES & SOCIAL MEDIA
+         ========================================================================= */}
+      {activeTab === "videos" && (
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-serif font-bold text-navy-900 flex items-center gap-2">
+                <Video className="w-5 h-5 text-red-600" />
+                <span>Video Updates &amp; Social Media Manager</span>
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Publish and manage video legal briefings from LinkedIn, Instagram, YouTube, and Facebook.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsAddVideoModalOpen(true)}
+              className="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-lg flex items-center gap-2 shadow-sm transition-colors shrink-0 cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add New Video Update</span>
+            </button>
+          </div>
+
+          {/* Videos Table */}
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-semibold">
+                  <tr>
+                    <th className="py-3.5 px-4">Platform / Date</th>
+                    <th className="py-3.5 px-4">Title &amp; Topic</th>
+                    <th className="py-3.5 px-4">Duration</th>
+                    <th className="py-3.5 px-4">Source Post</th>
+                    <th className="py-3.5 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {videos.map((vid) => (
+                    <tr key={vid.id} className="hover:bg-slate-50/80 transition-colors">
+                      <td className="py-4 px-4 align-top whitespace-nowrap">
+                        <div className="space-y-1">
+                          <span
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white ${
+                              vid.platform === "LinkedIn"
+                                ? "bg-[#0077b5]"
+                                : vid.platform === "Instagram"
+                                ? "bg-gradient-to-r from-purple-600 to-pink-600"
+                                : vid.platform === "YouTube"
+                                ? "bg-red-600"
+                                : "bg-blue-600"
+                            }`}
+                          >
+                            {vid.platform}
+                          </span>
+                          <div className="text-[11px] text-slate-500">{vid.date}</div>
+                        </div>
+                      </td>
+
+                      <td className="py-4 px-4 align-top">
+                        <div className="font-serif font-bold text-navy-950 text-sm max-w-md">
+                          {vid.title}
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-1">
+                          Topic: <span className="font-semibold text-slate-700">{vid.topic}</span>
+                        </div>
+                        <p className="text-xs text-slate-600 mt-1 line-clamp-2 max-w-lg">
+                          {vid.summary}
+                        </p>
+                      </td>
+
+                      <td className="py-4 px-4 align-top whitespace-nowrap text-slate-600 font-mono text-[11px]">
+                        {vid.duration}
+                      </td>
+
+                      <td className="py-4 px-4 align-top whitespace-nowrap">
+                        <a
+                          href={vid.platformUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-brass-700 hover:text-brass-800 font-semibold text-xs"
+                        >
+                          <span>Open on {vid.platform}</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </td>
+
+                      <td className="py-4 px-4 align-top text-right whitespace-nowrap">
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteVideo(vid.id, vid.title)}
+                          title="Delete video update"
+                          className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors cursor-pointer"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          TAB 3: CONTACT INQUIRIES
          ========================================================================= */}
       {activeTab === "inquiries" && (
         <div className="space-y-6">
@@ -1369,6 +1599,169 @@ export default function AdminPortalPage() {
                     </>
                   ) : (
                     <span>Publish Monthly Issue</span>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          MODAL: ADD NEW VIDEO UPDATE
+         ========================================================================= */}
+      {isAddVideoModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/80 backdrop-blur-xs animate-in fade-in">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-xl w-full p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center">
+                  <Video className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-serif font-bold text-lg text-navy-900">
+                    Publish New Video Update
+                  </h3>
+                  <p className="text-[11px] text-slate-500">
+                    Add video briefing from LinkedIn, Instagram, YouTube, or Facebook
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAddVideoModalOpen(false)}
+                className="text-slate-400 hover:text-slate-700 text-lg font-bold"
+              >
+                &times;
+              </button>
+            </div>
+
+            <form onSubmit={handlePublishVideo} className="space-y-4 text-xs">
+              <div className="space-y-1">
+                <label className="font-semibold text-slate-700 block">
+                  Video Title <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newVidTitle}
+                  onChange={(e) => setNewVidTitle(e.target.value)}
+                  placeholder="e.g. Order VIII Rule 1 CPC: Commercial Court 120-Day Limit"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-red-600"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="font-semibold text-slate-700 block">
+                    Source Social Platform <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={newVidPlatform}
+                    onChange={(e: any) => setNewVidPlatform(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-red-600"
+                  >
+                    <option value="LinkedIn">LinkedIn Video</option>
+                    <option value="Instagram">Instagram Reel</option>
+                    <option value="YouTube">YouTube Video</option>
+                    <option value="Facebook">Facebook Update</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-semibold text-slate-700 block">
+                    Duration / Length
+                  </label>
+                  <input
+                    type="text"
+                    value={newVidDuration}
+                    onChange={(e) => setNewVidDuration(e.target.value)}
+                    placeholder="e.g. 2:45 min"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-red-600"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-semibold text-slate-700 block">
+                  Social Post URL / Link <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="url"
+                  required
+                  value={newVidUrl}
+                  onChange={(e) => setNewVidUrl(e.target.value)}
+                  placeholder="e.g. https://www.linkedin.com/posts/lalitajmani_... or Instagram URL"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-red-600"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="font-semibold text-slate-700 block">
+                    Legal Topic / Practice Area
+                  </label>
+                  <input
+                    type="text"
+                    value={newVidTopic}
+                    onChange={(e) => setNewVidTopic(e.target.value)}
+                    placeholder="e.g. Commercial Courts Act"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-red-600"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-semibold text-slate-700 block">
+                    Cover Thumbnail
+                  </label>
+                  <select
+                    value={newVidThumbnail}
+                    onChange={(e) => setNewVidThumbnail(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-red-600"
+                  >
+                    <option value="/delhi-high-court.jpg">Delhi High Court</option>
+                    <option value="/delhi-district-court.jpg">District Court</option>
+                    <option value="/commercial-arbitration-court.jpg">Arbitration Court</option>
+                    <option value="/delhi-court-bench.jpg">Courtroom Bench</option>
+                    <option value="/delhi-law-library.jpg">Law Library</option>
+                    <option value="/supreme-court-india.jpg">Supreme Court</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-semibold text-slate-700 block">
+                  Video Briefing Summary
+                </label>
+                <textarea
+                  rows={3}
+                  value={newVidSummary}
+                  onChange={(e) => setNewVidSummary(e.target.value)}
+                  placeholder="Short description of the case law or statutory procedural principles discussed..."
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-red-600"
+                />
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsAddVideoModalOpen(false)}
+                  className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={videoSubmitting}
+                  className="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold flex items-center gap-2 shadow-sm disabled:opacity-50 cursor-pointer"
+                >
+                  {videoSubmitting ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      <span>Publishing...</span>
+                    </>
+                  ) : (
+                    <span>Publish Video Update</span>
                   )}
                 </button>
               </div>
